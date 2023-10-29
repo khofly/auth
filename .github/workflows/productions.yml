@@ -1,0 +1,22 @@
+# name: Vercel Production Deployment
+# on:
+#   push:
+#     branches:
+#       - master
+# jobs:
+#   Deploy-Production:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+
+#       # Official vercel example - https://vercel.com/guides/how-can-i-use-github-actions-with-vercel
+
+#       # With amondnet/vercel-action
+#       - uses: amondnet/vercel-action@v25
+#         with:
+#           vercel-token: ${{ secrets.VERCEL_TOKEN }}
+#           vercel-org-id: ${{ secrets.ORG_ID }}
+#           vercel-project-id: ${{ secrets.PROJECT_ID }}
+#           vercel-project-name: fossly-auth
+#           alias-domains: auth.fossly.tech
+#           vercel-args: --prod

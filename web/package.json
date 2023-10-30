@@ -1,0 +1,42 @@
+{
+  "name": "khofly-auth",
+  "version": "1.0.0",
+  "private": false,
+  "author": "cufta22",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "start": "next start",
+    "lint": "next lint",
+    "build": "next build"
+  },
+  "dependencies": {
+    "@khofly/core": "^1.8.5",
+    "@mantine/core": "^7.1.7",
+    "@mantine/form": "^7.1.7",
+    "@mantine/hooks": "^7.1.7",
+    "@mantine/modals": "^7.1.7",
+    "@mantine/notifications": "^7.1.7",
+    "@supabase/ssr": "^0.0.4",
+    "@supabase/supabase-js": "^2.38.4",
+    "@tabler/icons-react": "^2.40.0",
+    "dayjs": "^1.11.10",
+    "next": "14.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "swr": "^2.2.4",
+    "zustand": "^4.4.4"
+  },
+  "devDependencies": {
+    "@types/node": "20.1.0",
+    "@types/react": "18.2.6",
+    "@types/react-dom": "18.2.4",
+    "eslint": "8.52.0",
+    "eslint-config-next": "14.0.0",
+    "postcss": "^8.4.31",
+    "postcss-preset-mantine": "^1.9.0",
+    "postcss-simple-vars": "^7.0.1",
+    "sass": "1.69.5",
+    "typescript": "5.2.2"
+  }
+}

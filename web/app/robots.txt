@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: *
+
+# Host
+Host: https://auth.khofly.com
+
+# Sitemaps
+Sitemap: https://auth.khofly.com/sitemap.xml

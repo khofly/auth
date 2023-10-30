@@ -1,0 +1,38 @@
+@use 'functions' as func;
+@use 'variables' as vars;
+
+.root {
+  padding-top: func.to-rem(80px);
+  padding-bottom: func.to-rem(120px);
+}
+
+.label {
+  text-align: center;
+  font-weight: 700;
+  font-size: func.to-rem(220px);
+  line-height: 1;
+  margin-bottom: calc(var(--mantine-spacing-xl) * 1);
+  color: light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
+
+  @media (max-width: vars.$mantine-breakpoint-sm) {
+    font-size: func.to-rem(120px);
+  }
+}
+
+.title {
+  font-family: Greycliff CF, var(--mantine-font-family);
+  text-align: center;
+  font-weight: 700;
+  font-size: func.to-rem(38px);
+
+  @media (max-width: vars.$mantine-breakpoint-sm) {
+    font-size: func.to-rem(32px);
+  }
+}
+
+.description {
+  max-width: func.to-rem(540px);
+  margin: auto;
+  margin-top: var(--mantine-spacing-sm);
+  margin-bottom: calc(var(--mantine-spacing-xl) * 1.5);
+}

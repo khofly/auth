@@ -17,6 +17,6 @@
 #           vercel-token: ${{ secrets.VERCEL_TOKEN }}
 #           vercel-org-id: ${{ secrets.ORG_ID }}
 #           vercel-project-id: ${{ secrets.PROJECT_ID }}
-#           vercel-project-name: fossly-auth
-#           alias-domains: auth.fossly.tech
+#           vercel-project-name: khofly-auth
+#           alias-domains: auth.khofly.tech
 #           vercel-args: --prod

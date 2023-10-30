@@ -16,8 +16,8 @@ Next.js app runs locally on [http://localhost:3000](http://localhost:3000)
 
 | Env        | Branch  |                            Domain                            |
 | :--------- | :-----: | :----------------------------------------------------------: |
-| production | master  | [staging-auth.fossly.tech](https://staging-auth.fossly.tech) |
-| staging    | staging |         [auth.fossly.tech](https://auth.fossly.tech)         |
+| production | master  | [staging-auth.khofly.tech](https://staging-auth.khofly.tech) |
+| staging    | staging |         [auth.khofly.tech](https://auth.khofly.tech)         |
 
 ## Translations
 

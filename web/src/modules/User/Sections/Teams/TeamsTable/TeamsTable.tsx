@@ -37,16 +37,16 @@ const TeamsTable: React.FC<Props> = ({ openTeam, setOpenTeam, tierTeamAvailable 
           />
         )}
         <Table>
-          <thead>
-            <tr>
-              <th>Team</th>
-              <th>Admin</th>
-              <th>Created at</th>
-              <th>Updated at</th>
-              <th style={{ textAlign: 'right' }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th>Team</Table.Th>
+              <Table.Th>Admin</Table.Th>
+              <Table.Th>Created at</Table.Th>
+              <Table.Th>Updated at</Table.Th>
+              <Table.Th>Actions</Table.Th>
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>{rows}</Table.Tbody>
         </Table>
 
         {!isLoading && !teams?.length && <EmptyState />}

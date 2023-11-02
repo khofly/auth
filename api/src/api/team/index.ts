@@ -23,8 +23,8 @@ export const teamRoutes = (app: Elysia) =>
       .get('/user', handleTeamUsersSelect)
 
       // Invitation apis
-      .get('/invitation', handleUserInvitationsSelect)
-      .post('/invitation', handleInvitationCreate)
-      .post('/invitation/accept', handleInvitationAccept)
-      .post('/invitation/reject', handleInvitationReject)
+      .get('/invitations', handleUserInvitationsSelect)
+      .post('/invitations', handleInvitationCreate)
+      .post('/invitations/accept', handleInvitationAccept)
+      .post('/invitations/reject', handleInvitationReject)
   );

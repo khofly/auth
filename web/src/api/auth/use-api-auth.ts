@@ -5,9 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import useFetch from '../use-fetch';
 import { useAuthStore } from 'src/store/auth';
-import { createBrowserClient, type CookieOptions } from '@supabase/ssr';
 import { createClient } from '@supabase/supabase-js';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
+import { useSupabaseStore } from '@store/supabase';
 
 export interface AuthDTO {
   email: string;
@@ -38,33 +38,35 @@ export const useApiAuth = () => {
   const router = useRouter();
   const { fetchData } = useFetch();
 
-  const supabaseClient = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        storage: {
-          getItem(key) {
-            return getCookie(key);
-          },
-          setItem(key, value) {
-            return setCookie(key, value, {
-              domain: process.env.NODE_ENV === 'development' ? 'localhost' : cookieDomain,
-              httpOnly: false,
-              sameSite: 'lax',
-              maxAge: 60 * 60 * 24 * 1, // ~ 1day
-              path: '/',
-              secure: process.env.NEXT_PUBLIC_HOST.startsWith('https://'),
-            });
-          },
-          removeItem(key) {
-            return deleteCookie(key);
-          },
-        },
-        // storageKey: 'sb-something',
-      },
-    }
-  );
+  const { supabaseClient } = useSupabaseStore((state) => ({ supabaseClient: state.supabaseClient }));
+
+  // const supabaseClient = createClient(
+  //   process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  //   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  //   {
+  //     auth: {
+  //       storage: {
+  //         getItem(key) {
+  //           return getCookie(key);
+  //         },
+  //         setItem(key, value) {
+  //           return setCookie(key, value, {
+  //             domain: process.env.NODE_ENV === 'development' ? 'localhost' : cookieDomain,
+  //             httpOnly: false,
+  //             sameSite: 'lax',
+  //             maxAge: 60 * 60 * 24 * 1, // ~ 1day
+  //             path: '/',
+  //             secure: process.env.NEXT_PUBLIC_HOST.startsWith('https://'),
+  //           });
+  //         },
+  //         removeItem(key) {
+  //           return deleteCookie(key);
+  //         },
+  //       },
+  //       // storageKey: 'sb-something',
+  //     },
+  //   }
+  // );
 
   const [isLoading, setLoading] = useState(false);
 
@@ -144,9 +146,7 @@ export const useApiAuth = () => {
     const { email, password } = dto;
     setLoading(true);
 
-    console.log('Auth start');
-
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
+    const { error } = await supabaseClient.auth.signInWithPassword({
       email,
       password,
     });

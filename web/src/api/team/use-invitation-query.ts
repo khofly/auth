@@ -3,6 +3,7 @@ import { IApiResponse } from '@khofly/core';
 import useFetch from '../use-fetch';
 import { useGlobalStore } from '@store/global';
 import useSWR from 'swr';
+import useToast from '@hooks/use-toast';
 
 export interface IInvitationWithTeam {
   id: string;
@@ -21,11 +22,12 @@ export const useInvitationsSWR = () => {
   const { session } = useGlobalStore((state) => ({
     session: state.session,
   }));
+  const { toast } = useToast();
 
   const { fetchData } = useFetch();
 
-  const fetcher = async (key) =>
-    fetchData(key, {
+  const fetcher = async (key) => {
+    const res = await fetchData(key, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -34,8 +36,13 @@ export const useInvitationsSWR = () => {
       },
     });
 
+    if (res?.error) toast.show({ title: 'Invitations error', message: res?.message, color: 'red' });
+
+    return res?.data;
+  };
+
   return useSWR(process.env.NEXT_PUBLIC_API_URL + '/team/invitations', fetcher, {
-    revalidateOnFocus: true,
+    revalidateOnFocus: false,
     revalidateOnMount: true,
   });
 

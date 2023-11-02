@@ -1,9 +1,5 @@
 import { create } from 'zustand';
 
-import contentJson from 'public/locales/en.json';
-
-export type ITranslations = typeof contentJson;
-
 interface AuthState {
   redirectTo: string;
   setRedirectTo: (domain: string) => void;

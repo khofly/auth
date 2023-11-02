@@ -1,32 +1,30 @@
-import { ITiers } from '@khofly/core';
-import { useQuery } from '@tanstack/react-query';
-import { QUERY_KEYS } from '../queryKeys';
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
+import { useGlobalStore } from '@store/global';
+import { useSupabaseStore } from '@store/supabase';
+
 import { useEffect } from 'react';
 
-export const useTierQuery = (): { tier: ITiers; isLoading: boolean } => {
-  const supabase = useSupabaseClient();
-  const user = useUser();
+export const useApiTier = () => {
+  const { supabaseClient } = useSupabaseStore((state) => ({ supabaseClient: state.supabaseClient }));
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: [QUERY_KEYS.TIER],
-    queryFn: async () => {
-      if (!user) return null;
-
-      let { data, error, status } = await supabase.from('tiers').select(`*`).eq('user_id', user.id).single();
-
-      if (error && status !== 406) return 1;
-
-      return data?.value || 1;
-    },
-    staleTime: Infinity,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
+  const { profile, setTier } = useGlobalStore((state) => ({
+    profile: state.profile,
+    setTier: state.setTier,
+  }));
 
   useEffect(() => {
-    if (user && !data) refetch();
-  }, [user]);
+    const fetchTier = async () => {
+      if (!profile) return;
 
-  return { tier: data, isLoading };
+      let { data, error, status } = await supabaseClient
+        .from('tiers')
+        .select(`*`)
+        .eq('user_id', profile.id)
+        .single();
+
+      if (error && status !== 406) return;
+
+      setTier(data?.value || 1);
+    };
+    fetchTier();
+  }, [profile]);
 };

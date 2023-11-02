@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Button, Flex, Text, rem } from '@mantine/core';
+import { Avatar, Button, Flex, Table, Text, rem } from '@mantine/core';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { getIconStyle } from '@utils/functions/iconStyle';
 import { IInvitationWithTeam } from 'src/api/team/use-invitation-query';
@@ -30,8 +30,8 @@ const InviteRow: React.FC<Props> = ({ team, id }) => {
   };
 
   return (
-    <tr>
-      <td>
+    <Table.Tr>
+      <Table.Td>
         <Flex align="center">
           <Avatar src={team.admin.avatar_url} alt={`${team.admin.display_name}'s avatar`} radius="xl" />
 
@@ -39,11 +39,11 @@ const InviteRow: React.FC<Props> = ({ team, id }) => {
             {team.admin.display_name}
           </Text>
         </Flex>
-      </td>
+      </Table.Td>
 
-      <td>{team.name}</td>
+      <Table.Td>{team.name}</Table.Td>
 
-      <td align="right">
+      <Table.Td align="right">
         <Button
           size="xs"
           mr="md"
@@ -63,8 +63,8 @@ const InviteRow: React.FC<Props> = ({ team, id }) => {
         >
           Reject
         </Button>
-      </td>
-    </tr>
+      </Table.Td>
+    </Table.Tr>
   );
 };
 

@@ -8,19 +8,19 @@ const InvitationsTable = () => {
   // Invitations data
   const { data: invitations, isLoading } = useInvitationsSWR();
 
-  const rows = invitations && invitations.map((inv, i) => <InviteRow key={i} {...inv} />);
+  const rows = invitations && invitations?.map((inv, i) => <InviteRow key={i} {...inv} />);
 
   return (
     <ScrollArea style={{ overflow: 'unset' }} offsetScrollbars>
       <Table>
-        <thead>
-          <tr>
-            <th>Invited by</th>
-            <th>Team name</th>
-            <th style={{ textAlign: 'right' }}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>Invited by</Table.Th>
+            <Table.Th>Team name</Table.Th>
+            <Table.Th style={{ textAlign: 'right' }}>Actions</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>{rows}</Table.Tbody>
       </Table>
 
       {!isLoading && !invitations?.length && <EmptyState />}

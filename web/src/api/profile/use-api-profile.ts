@@ -1,16 +1,18 @@
+import { useSupabaseStore } from '@store/supabase';
 import { createBrowserClient } from '@supabase/ssr';
-import { Session } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';
 import { useGlobalStore } from 'src/store/global';
 
 // Sets user profile
 const useApiProfile = () => {
-  const supabaseClient = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  // const supabaseClient = createBrowserClient(
+  //   process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  //   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  // );
 
   // const [session, setSession] = useState<Session | null>(null);
+
+  const { supabaseClient } = useSupabaseStore((state) => ({ supabaseClient: state.supabaseClient }));
 
   const { setProfile, setSession, session } = useGlobalStore((state) => ({
     setSession: state.setSession,
@@ -19,6 +21,8 @@ const useApiProfile = () => {
   }));
 
   useEffect(() => {
+    if (!supabaseClient) return;
+
     supabaseClient.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
@@ -26,7 +30,7 @@ const useApiProfile = () => {
     supabaseClient.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
-  }, []);
+  }, [supabaseClient]);
 
   useEffect(() => {
     const fetchProfile = async () => {

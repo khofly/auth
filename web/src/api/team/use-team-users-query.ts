@@ -17,11 +17,14 @@ export const useTeamUsersSWR = (id: string) => {
   const { session } = useGlobalStore((state) => ({
     session: state.session,
   }));
+  const { toast } = useToast();
 
   const { fetchData } = useFetch();
 
-  const fetcher = async (key) =>
-    fetchData(key, {
+  const fetcher = async (key) => {
+    if (!id) return [];
+
+    const res = await fetchData(key, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -30,8 +33,13 @@ export const useTeamUsersSWR = (id: string) => {
       },
     });
 
+    if (res?.error) toast.show({ title: 'Teams error', message: res?.message, color: 'red' });
+
+    return res?.data;
+  };
+
   return useSWR(process.env.NEXT_PUBLIC_API_URL + `/team/user?team_id=` + id, fetcher, {
-    revalidateOnFocus: true,
-    revalidateOnMount: true,
+    revalidateOnFocus: false,
+    revalidateOnMount: false,
   });
 };

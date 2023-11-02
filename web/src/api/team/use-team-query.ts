@@ -3,6 +3,7 @@ import { IApiResponse, ITeam } from '@khofly/core';
 import useFetch from '../use-fetch';
 import { useGlobalStore } from '@store/global';
 import useSWR from 'swr';
+import useToast from '@hooks/use-toast';
 
 export interface ITeamWithAdmin extends ITeam {
   admin: {
@@ -15,11 +16,12 @@ export const useTeamsSWR = () => {
   const { session } = useGlobalStore((state) => ({
     session: state.session,
   }));
+  const { toast } = useToast();
 
   const { fetchData } = useFetch();
 
-  const fetcher = async (key) =>
-    fetchData(key, {
+  const fetcher = async (key) => {
+    const res = await fetchData(key, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -27,6 +29,11 @@ export const useTeamsSWR = () => {
         'SB-Refresh-Token': session?.refresh_token || '',
       },
     });
+
+    if (res?.error) toast.show({ title: 'Teams error', message: res?.message, color: 'red' });
+
+    return res?.data;
+  };
 
   return useSWR(process.env.NEXT_PUBLIC_API_URL + '/team', fetcher, {
     revalidateOnFocus: true,

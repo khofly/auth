@@ -1,9 +1,9 @@
 import { Progress, Text, Popover, Box } from '@mantine/core';
-import { IFC, ITranslations } from '@ts/global.types';
+import { DotNestedKeys, IFC } from '@ts/global.types';
 import { PASSWORD_LENGTH } from '@utils/constants/auth';
 
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useTranslations } from '@store/global';
+import { ITranslations, useTranslations } from '@store/global';
 
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
   return (
@@ -13,7 +13,10 @@ function PasswordRequirement({ meets, label }: { meets: boolean; label: string }
   );
 }
 
-const REQUIREMENTS = [
+const REQUIREMENTS: {
+  re: RegExp;
+  label: DotNestedKeys<ITranslations>;
+}[] = [
   { re: /[0-9]/, label: 'pages.auth_register.strength.number' },
   { re: /[a-z]/, label: 'pages.auth_register.strength.lowercase' },
   { re: /[A-Z]/, label: 'pages.auth_register.strength.uppercase' },
@@ -22,7 +25,6 @@ const REQUIREMENTS = [
 
 function getStrength(password: string) {
   let multiplier = password.length > PASSWORD_LENGTH - 1 ? 0 : 1;
-  console.log(multiplier);
 
   REQUIREMENTS.forEach((requirement) => {
     if (!requirement.re.test(password)) {

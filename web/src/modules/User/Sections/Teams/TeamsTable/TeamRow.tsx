@@ -1,4 +1,4 @@
-import { ActionIcon, Avatar, Button, Flex, Group, Menu, Text, rem } from '@mantine/core';
+import { ActionIcon, Avatar, Button, Flex, Group, Menu, Table, Text, rem } from '@mantine/core';
 import React, { Dispatch } from 'react';
 import { ITeamWithAdmin } from 'src/api/team/use-team-query';
 
@@ -50,18 +50,18 @@ const TeamRow: React.FC<Props> = ({
   };
 
   return (
-    <tr>
-      <td>
+    <Table.Tr>
+      <Table.Td>
         <Flex align="center">
           <IconUsers />
 
-          <Text ml="xs" fz={rem(14)} fw={600}>
+          <Text ml="xs" fz={rem(14)} fw={700}>
             {name}
           </Text>
         </Flex>
-      </td>
+      </Table.Td>
 
-      <td>
+      <Table.Td>
         <Flex align="center">
           <Avatar src={admin.avatar_url} alt={`${admin.display_name}'s avatar`} radius="xl" />
 
@@ -69,14 +69,18 @@ const TeamRow: React.FC<Props> = ({
             {admin.display_name}
           </Text>
         </Flex>
-      </td>
+      </Table.Td>
 
-      <td>{dayjs(created_at).fromNow()}</td>
+      <Table.Td>
+        <Text>{dayjs(created_at).fromNow()}</Text>
+      </Table.Td>
 
-      <td>{dayjs(updated_at).fromNow()}</td>
+      <Table.Td>
+        <Text>{dayjs(updated_at).fromNow()}</Text>
+      </Table.Td>
 
-      <td align="right">
-        <Group gap="sm" justify="flex-start">
+      <Table.Td align="right">
+        <Group gap="sm">
           <Button
             size="xs"
             onClick={() => setOpenTeam({ admin, admin_id, created_at, id, name, updated_at })}
@@ -105,8 +109,8 @@ const TeamRow: React.FC<Props> = ({
             </Menu.Dropdown>
           </Menu>
         </Group>
-      </td>
-    </tr>
+      </Table.Td>
+    </Table.Tr>
   );
 };
 

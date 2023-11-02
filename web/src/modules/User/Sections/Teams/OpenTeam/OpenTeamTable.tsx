@@ -39,15 +39,15 @@ const OpenTeamTable: React.FC<Props> = ({ openTeam, setOpenTeam }) => {
           setPage={setPage}
         />
         <Table>
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>{!isLoading && rows}</tbody>
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th>User</Table.Th>
+              <Table.Th>Email</Table.Th>
+              <Table.Th>Role</Table.Th>
+              <Table.Th>Actions</Table.Th>
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>{!isLoading && rows}</Table.Tbody>
         </Table>
 
         {!isLoading && !members?.length && <EmptyState />}

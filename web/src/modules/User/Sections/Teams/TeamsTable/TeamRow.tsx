@@ -4,10 +4,11 @@ import { ITeamWithAdmin } from 'src/api/team/use-team-query';
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { IconArrowRight, IconDots, IconTrash, IconUsers, IconUsersGroup } from '@tabler/icons-react';
-import useGlobalCtx from 'src/store/ol-global/use-global-ctx';
+import { IconDots, IconTrash, IconUsers, IconUsersGroup } from '@tabler/icons-react';
 import { openModal } from '@mantine/modals';
 import DeleteModal from '../modals/DeleteModal';
+import { useTranslations } from '@store/global';
+import { getIconStyle } from '@utils/functions/iconStyle';
 
 dayjs.extend(relativeTime);
 
@@ -26,7 +27,7 @@ const TeamRow: React.FC<Props> = ({
   setPage,
   setOpenTeam,
 }) => {
-  const { translate, content } = useGlobalCtx();
+  const translate = useTranslations();
 
   const handleTeamAction = (type: 'delete' | 'name') => {
     return openModal({
@@ -34,7 +35,7 @@ const TeamRow: React.FC<Props> = ({
         <Text size="lg" fw={600}>
           {
             {
-              delete: translate(content.pages.user.teams.teamsTable.modalDeleteTitle),
+              delete: translate('pages.user.teams.teamsTable.modalDeleteTitle'),
               // name: translate(content.pages.user.teams.teamsTable.modalNameTitle),
             }[type]
           }
@@ -54,7 +55,7 @@ const TeamRow: React.FC<Props> = ({
         <Flex align="center">
           <IconUsers />
 
-          <Text ml="xs" size={rem(14)} weight={600}>
+          <Text ml="xs" fz={rem(14)} fw={600}>
             {name}
           </Text>
         </Flex>
@@ -64,7 +65,7 @@ const TeamRow: React.FC<Props> = ({
         <Flex align="center">
           <Avatar src={admin.avatar_url} alt={`${admin.display_name}'s avatar`} radius="xl" />
 
-          <Text ml="xs" size={rem(14)} weight={600}>
+          <Text ml="xs" size={rem(14)} fw={600}>
             {admin.display_name}
           </Text>
         </Flex>
@@ -75,7 +76,7 @@ const TeamRow: React.FC<Props> = ({
       <td>{dayjs(updated_at).fromNow()}</td>
 
       <td align="right">
-        <Group spacing="sm" position="right">
+        <Group gap="sm" justify="flex-start">
           <Button
             size="xs"
             onClick={() => setOpenTeam({ admin, admin_id, created_at, id, name, updated_at })}
@@ -95,11 +96,11 @@ const TeamRow: React.FC<Props> = ({
               </Menu.Item> */}
 
               <Menu.Item
-                icon={<IconTrash size={20} />}
+                leftSection={<IconTrash style={getIconStyle(20)} />}
                 color="red"
                 onClick={() => handleTeamAction('delete')}
               >
-                {translate(content.pages.user.teams.teamsTable.actionDelete)}
+                {translate('pages.user.teams.teamsTable.actionDelete')}
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>

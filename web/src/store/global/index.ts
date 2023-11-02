@@ -2,12 +2,16 @@ import { create } from 'zustand';
 
 import contentJson from 'public/locales/en.json';
 import { IProfile, ITiers } from '@khofly/core';
+import { Session } from '@supabase/supabase-js';
 
 export type ITranslations = typeof contentJson;
 
 interface GlobalState {
   language: 'en';
   content: ITranslations; // Content fetched from public/locales
+
+  session: Session | null;
+  setSession: (session: Session | null) => void;
 
   profile: IProfile | null;
   loadingProfile: boolean;
@@ -26,6 +30,9 @@ export const useGlobalStore = create<GlobalState>()((set) => ({
       language: locale,
       content: require(`../../../public/locales/${locale}.json`),
     }),
+
+  session: null,
+  setSession: (session) => set({ session }),
 
   profile: null,
   loadingProfile: true,

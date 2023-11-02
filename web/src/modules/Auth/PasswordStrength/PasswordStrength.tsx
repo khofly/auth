@@ -3,36 +3,34 @@ import { IFC, ITranslations } from '@ts/global.types';
 import { PASSWORD_LENGTH } from '@utils/constants/auth';
 
 import { IconCheck, IconX } from '@tabler/icons-react';
-import useGlobalCtx from 'src/store/ol-global/use-global-ctx';
+import { useTranslations } from '@store/global';
 
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
   return (
-    <Text color={meets ? 'teal' : 'red'} sx={{ display: 'flex', alignItems: 'center' }} mt={7} size="sm">
+    <Text c={meets ? 'teal' : 'red'} style={{ display: 'flex', alignItems: 'center' }} mt={7} size="sm">
       {meets ? <IconCheck size="1rem" /> : <IconX size="1rem" />} <Box ml={10}>{label}</Box>
     </Text>
   );
 }
 
-const getRequirements = (content: ITranslations) => [
-  { re: /[0-9]/, label: content.pages.auth_register.strength.number },
-  { re: /[a-z]/, label: content.pages.auth_register.strength.lowercase },
-  { re: /[A-Z]/, label: content.pages.auth_register.strength.uppercase },
+const REQUIREMENTS = [
+  { re: /[0-9]/, label: 'pages.auth_register.strength.number' },
+  { re: /[a-z]/, label: 'pages.auth_register.strength.lowercase' },
+  { re: /[A-Z]/, label: 'pages.auth_register.strength.uppercase' },
   //   { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: 'Includes special symbol' },
 ];
 
-function getStrength(password: string, content: ITranslations) {
+function getStrength(password: string) {
   let multiplier = password.length > PASSWORD_LENGTH - 1 ? 0 : 1;
   console.log(multiplier);
 
-  const requirements = getRequirements(content);
-
-  requirements.forEach((requirement) => {
+  REQUIREMENTS.forEach((requirement) => {
     if (!requirement.re.test(password)) {
       multiplier += 1;
     }
   });
 
-  return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
+  return Math.max(100 - (100 / (REQUIREMENTS.length + 1)) * multiplier, 10);
 }
 
 interface Props extends IFC {
@@ -40,9 +38,9 @@ interface Props extends IFC {
 }
 
 const PasswordStrength: React.FC<Props> = ({ children, value }) => {
-  const { content, translate } = useGlobalCtx();
+  const translate = useTranslations();
 
-  const checks = getRequirements(content).map((requirement, index) => (
+  const checks = REQUIREMENTS.map((requirement, index) => (
     <PasswordRequirement
       key={index}
       label={translate(requirement.label)}
@@ -50,7 +48,7 @@ const PasswordStrength: React.FC<Props> = ({ children, value }) => {
     />
   ));
 
-  const strength = getStrength(value, content);
+  const strength = getStrength(value);
   const color = strength === 100 ? 'teal' : strength > 50 ? 'yellow' : 'red';
 
   return (
@@ -67,7 +65,7 @@ const PasswordStrength: React.FC<Props> = ({ children, value }) => {
         <Progress color={color} value={strength} size={5} style={{ marginBottom: 10 }} />
 
         <PasswordRequirement
-          label={translate(content.pages.auth_register.strength.minLength, `${PASSWORD_LENGTH}`)}
+          label={translate('pages.auth_register.strength.minLength', `${PASSWORD_LENGTH}`)}
           meets={value.length > PASSWORD_LENGTH - 1}
         />
 

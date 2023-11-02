@@ -1,14 +1,16 @@
+'use client';
+
 import { Center, Container, Loader } from '@mantine/core';
-import { useSession } from '@supabase/auth-helpers-react';
 import React from 'react';
 import Danger from './Sections/Danger';
 import Details from './Sections/Details/Details';
 import Teams from './Sections/Teams/Teams';
+import { useGlobalStore } from '@store/global';
 
 const Profile = () => {
-  const session = useSession();
+  const { profile } = useGlobalStore((state) => ({ profile: state.profile }));
 
-  if (!session) {
+  if (!profile) {
     return (
       <Center h="100%">
         <Loader size="xl" />

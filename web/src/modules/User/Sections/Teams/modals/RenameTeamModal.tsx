@@ -1,9 +1,8 @@
 import { Button, TextInput } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
-import { MUTATION_KEYS } from 'src/api/queryKeys';
-import { RenameTeamDTO, useCommonTeamMutation } from 'src/api/team/use-team-mutation';
-import useGlobalCtx from 'src/store/ol-global/use-global-ctx';
+import { useTranslations } from '@store/global';
+import { RenameTeamDTO, useCommonTeamSWR } from 'src/api/team/use-team-mutation';
 
 interface Props {
   id: string;
@@ -11,12 +10,9 @@ interface Props {
 }
 
 const RenameTeamModal: React.FC<Props> = ({ id, name }) => {
-  const { translate, content } = useGlobalCtx();
-  const teamMutation = useCommonTeamMutation<RenameTeamDTO>(
-    '/api/team/name',
-    'POST',
-    MUTATION_KEYS.TEAM_RENAME
-  );
+  const translate = useTranslations();
+
+  const teamSwr = useCommonTeamSWR<RenameTeamDTO>(process.env.NEXT_PUBLIC_API_URL + '/team/name', 'POST');
 
   const form = useForm({
     initialValues: {
@@ -24,12 +20,12 @@ const RenameTeamModal: React.FC<Props> = ({ id, name }) => {
     },
 
     validate: {
-      name: isNotEmpty(translate(content.common.fieldRequired)),
+      name: isNotEmpty(translate('common.fieldRequired')),
     },
   });
 
   const handleSubmit = async (values: typeof form.values) => {
-    await teamMutation.mutateAsync({ name: values.name });
+    await teamSwr.trigger({ name: values.name });
 
     closeAllModals();
   };
@@ -37,14 +33,14 @@ const RenameTeamModal: React.FC<Props> = ({ id, name }) => {
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <TextInput
-        label={translate(content.pages.user.teams.teamsTable.modalNameInput)}
-        placeholder={translate(content.pages.user.teams.teamsTable.modalNameInput)}
+        label={translate('pages.user.teams.teamsTable.modalNameInput')}
+        placeholder={translate('pages.user.teams.teamsTable.modalNameInput')}
         mt="sm"
         {...form.getInputProps('name')}
       />
 
-      <Button fullWidth mt="lg" type="submit" loading={teamMutation.isLoading}>
-        {translate(content.pages.user.teams.teamsTable.modalNameBtn)}
+      <Button fullWidth mt="lg" type="submit" loading={teamSwr.isMutating}>
+        {translate('pages.user.teams.teamsTable.modalNameBtn')}
       </Button>
     </form>
   );

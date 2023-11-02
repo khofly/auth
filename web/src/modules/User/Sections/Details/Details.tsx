@@ -16,8 +16,6 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 
-import useGlobalCtx from 'src/store/ol-global/use-global-ctx';
-
 import {
   IconAward,
   IconBrandGithub,
@@ -31,7 +29,6 @@ import {
   IconSignature,
   IconUser,
 } from '@tabler/icons-react';
-import { useSession } from '@supabase/auth-helpers-react';
 import useDownload from '@hooks/use-download';
 import { useResponsive } from '@hooks/use-responsive';
 import { getTierData } from '@khofly/core';
@@ -40,12 +37,19 @@ import { useState } from 'react';
 import { openModal } from '@mantine/modals';
 import AvatarModal from './modals/AvatarModal';
 import RenameModal from './modals/RenameModal';
+import { useGlobalStore, useTranslations } from '@store/global';
+import { getIconStyle } from '@utils/functions/iconStyle';
 
 const Details = () => {
-  const { translate, content, tier, loadingTier, profile } = useGlobalCtx();
+  const translate = useTranslations();
+  const { tier, loadingTier, profile, session } = useGlobalStore((state) => ({
+    tier: state.tier,
+    loadingTier: state.loadingProfile,
+    profile: state.profile,
+    session: state.session,
+  }));
 
   const { jsFileDownload } = useDownload();
-  const session = useSession();
   const theme = useMantineTheme();
   const isSm = useResponsive('max', 'sm');
 
@@ -68,8 +72,8 @@ const Details = () => {
         <Text size="lg" fw={600}>
           {
             {
-              avatar_url: translate(content.pages.user.details.modalAvatarTitle),
-              display_name: translate(content.pages.user.details.modalNameTitle),
+              avatar_url: translate('pages.user.details.modalAvatarTitle'),
+              display_name: translate('pages.user.details.modalNameTitle'),
             }[type]
           }
         </Text>
@@ -89,10 +93,10 @@ const Details = () => {
   return (
     <Paper radius="md" p="xl" mb={60} withBorder>
       <Flex align="center" mb="xl">
-        <IconUser size={32} />
+        <IconUser style={getIconStyle(32)} />
 
-        <Text size={28} weight={600} ml="sm">
-          {translate(content.pages.user.details.title)}
+        <Text fz={28} fw={600} ml="sm">
+          {translate('pages.user.details.title')}
         </Text>
       </Flex>
 
@@ -106,7 +110,7 @@ const Details = () => {
       >
         <Flex align="center">
           <Group
-            sx={{ position: 'relative', cursor: 'pointer' }}
+            style={{ position: 'relative', cursor: 'pointer' }}
             onMouseEnter={() => setOverlay1(true)}
             onMouseLeave={() => setOverlay1(false)}
           >
@@ -116,7 +120,7 @@ const Details = () => {
               <Overlay
                 color="#000"
                 opacity={0.6}
-                sx={{ borderRadius: theme.radius.xl, zIndex: 99 }}
+                style={{ borderRadius: theme.radius.xl, zIndex: 99 }}
                 onClick={() => handleProfileAction('avatar_url')}
               >
                 <Center h="100%">
@@ -136,7 +140,7 @@ const Details = () => {
               >
                 {providerIcon[provider]}
 
-                <Text weight={600} size="xl" ml="xs" truncate>
+                <Text fw={600} size="xl" ml="xs" truncate>
                   {username}
                 </Text>
 
@@ -151,7 +155,7 @@ const Details = () => {
             <Flex align="center">
               <IconMail size={24} />
 
-              <Text size="md" weight={500} color="dimmed" ml="xs" truncate>
+              <Text size="md" fw={500} c="dimmed" ml="xs" truncate>
                 {session.user.email}
               </Text>
             </Flex>
@@ -160,7 +164,7 @@ const Details = () => {
 
         <div style={{ flex: 1 }}></div>
 
-        <Button leftIcon={<IconDownload size={20} />} onClick={handleDownload}>
+        <Button leftSection={<IconDownload style={getIconStyle(20)} />} onClick={handleDownload}>
           Download my data
         </Button>
       </Flex>
@@ -168,9 +172,9 @@ const Details = () => {
       <Divider my="md" />
 
       <Flex align="center" mt={30}>
-        <IconIdBadge2 size={28} />
+        <IconIdBadge2 style={getIconStyle(28)} />
 
-        <Text size="md" weight={500} mx="xs" truncate>
+        <Text size="md" fw={500} mx="xs" truncate>
           Your ID:
         </Text>
 
@@ -192,9 +196,9 @@ const Details = () => {
       </Flex>
 
       <Flex align="center" mt="xl">
-        <IconAward size={28} />
+        <IconAward style={getIconStyle(28)} />
 
-        <Text size="md" weight={500} mx="xs" truncate>
+        <Text size="md" fw={500} mx="xs" truncate>
           Your tier:
         </Text>
 

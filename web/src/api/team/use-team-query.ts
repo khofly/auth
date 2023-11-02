@@ -1,7 +1,8 @@
 import { IApiResponse, ITeam } from '@khofly/core';
-import { useQuery } from '@tanstack/react-query';
-import { QUERY_KEYS } from '../queryKeys';
+
 import useFetch from '../use-fetch';
+import { useGlobalStore } from '@store/global';
+import useSWR from 'swr';
 
 export interface ITeamWithAdmin extends ITeam {
   admin: {
@@ -10,20 +11,37 @@ export interface ITeamWithAdmin extends ITeam {
   };
 }
 
-const useTeamsQuery = () => {
+export const useTeamsSWR = () => {
+  const { session } = useGlobalStore((state) => ({
+    session: state.session,
+  }));
+
   const { fetchData } = useFetch();
 
-  return useQuery<IApiResponse<ITeamWithAdmin[]>['data']>({
-    queryKey: [QUERY_KEYS.TEAMS],
-    queryFn: async () => {
-      const { data } = await fetchData('/api/team');
+  const fetcher = async (key) =>
+    fetchData(key, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${session?.access_token}`,
+        'SB-Refresh-Token': session?.refresh_token || '',
+      },
+    });
 
-      return data;
-    },
-    staleTime: Infinity,
-    refetchOnMount: true,
-    refetchOnWindowFocus: false,
+  return useSWR(process.env.NEXT_PUBLIC_API_URL + '/team', fetcher, {
+    revalidateOnFocus: true,
+    revalidateOnMount: true,
   });
-};
 
-export { useTeamsQuery };
+  // return useQuery<IApiResponse<ITeamWithAdmin[]>['data']>({
+  //   queryKey: [QUERY_KEYS.TEAMS],
+  //   queryFn: async () => {
+  //     const { data } = await fetchData('/api/team');
+
+  //     return data;
+  //   },
+  //   staleTime: Infinity,
+  //   refetchOnMount: true,
+  //   refetchOnWindowFocus: false,
+  // });
+};

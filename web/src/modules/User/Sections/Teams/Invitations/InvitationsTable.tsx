@@ -1,17 +1,17 @@
 import { Center, Loader, ScrollArea, Table } from '@mantine/core';
 import React from 'react';
-import { useInvitationsQuery } from 'src/api/team/use-invitation-query';
+import { useInvitationsSWR } from 'src/api/team/use-invitation-query';
 import EmptyState from '../states/EmptyState';
 import InviteRow from './InviteRow';
 
 const InvitationsTable = () => {
   // Invitations data
-  const { data: invitations, isLoading } = useInvitationsQuery();
+  const { data: invitations, isLoading } = useInvitationsSWR();
 
   const rows = invitations && invitations.map((inv, i) => <InviteRow key={i} {...inv} />);
 
   return (
-    <ScrollArea sx={{ overflow: 'unset' }} offsetScrollbars>
+    <ScrollArea style={{ overflow: 'unset' }} offsetScrollbars>
       <Table>
         <thead>
           <tr>

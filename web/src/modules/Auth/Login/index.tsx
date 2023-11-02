@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { Center, Container } from '@mantine/core';
+import { Center } from '@mantine/core';
 import LoginForm from './Form';
 
 const LoginPage = () => {

@@ -1,15 +1,12 @@
 import { Button, Divider, Flex, Pagination, Text } from '@mantine/core';
-import { IconArrowLeft, IconPlus, IconUser } from '@tabler/icons-react';
+import { IconArrowLeft, IconUser } from '@tabler/icons-react';
 import React, { Dispatch } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import useGlobalCtx from 'src/store/ol-global/use-global-ctx';
-import { QUERY_KEYS } from 'src/api/queryKeys';
-import { IProfile } from '@khofly/core';
 import { openModal } from '@mantine/modals';
-import CreateTeamModal from '../modals/CreateTeamModal';
 import { ITeamWithAdmin } from 'src/api/team/use-team-query';
 import { IMemberWithUser } from 'src/api/team/use-team-users-query';
 import InviteUserModal from '../modals/InvileUserModal';
+import { useGlobalStore, useTranslations } from '@store/global';
+import { getIconStyle } from '@utils/functions/iconStyle';
 
 interface Props {
   members: IMemberWithUser[];
@@ -21,7 +18,8 @@ interface Props {
 }
 
 const OpenTeamTableTop: React.FC<Props> = ({ members, openTeam, setOpenTeam, page, setPage, total }) => {
-  const { translate, content, profile } = useGlobalCtx();
+  const translate = useTranslations();
+  const { profile } = useGlobalStore((state) => ({ profile: state.profile }));
 
   const isAdmin = profile?.id === openTeam?.admin_id;
 
@@ -29,7 +27,7 @@ const OpenTeamTableTop: React.FC<Props> = ({ members, openTeam, setOpenTeam, pag
     return openModal({
       title: (
         <Text size="lg" fw={600}>
-          {translate(content.pages.user.teams.openTeamTable.modalInviteTitle)}
+          {translate('pages.user.teams.openTeamTable.modalInviteTitle')}
         </Text>
       ),
       centered: true,
@@ -44,14 +42,14 @@ const OpenTeamTableTop: React.FC<Props> = ({ members, openTeam, setOpenTeam, pag
           variant="light"
           size="xs"
           onClick={() => setOpenTeam(null)}
-          leftIcon={<IconArrowLeft size={16} />}
+          leftSection={<IconArrowLeft style={getIconStyle(16)} />}
         >
-          {translate(content.pages.user.teams.openTeamTable.backBtn)}
+          {translate('pages.user.teams.openTeamTable.backBtn')}
         </Button>
 
         {isAdmin && (
-          <Button size="xs" leftIcon={<IconUser size={16} />} onClick={openInviteModal}>
-            {translate(content.pages.user.teams.openTeamTable.inviteBtn)}
+          <Button size="xs" leftSection={<IconUser style={getIconStyle(16)} />} onClick={openInviteModal}>
+            {translate('pages.user.teams.openTeamTable.inviteBtn')}
           </Button>
         )}
 

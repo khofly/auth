@@ -1,0 +1,23 @@
+.link {
+  font-size: 12;
+}
+
+.form {
+  width: 100%;
+}
+
+.group {
+  align-items: flex-end;
+}
+
+.input {
+  flex: 1;
+}
+
+.resetIcon {
+  cursor: pointer;
+
+  &:hover {
+    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-5));
+  }
+}

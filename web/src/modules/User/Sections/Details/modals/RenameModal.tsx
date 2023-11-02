@@ -1,17 +1,17 @@
 import { Button, TextInput } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
-import { useCommonProfileMutation, UpdateNameDTO } from 'src/api/profile/use-profile-mutation';
-import { MUTATION_KEYS } from 'src/api/queryKeys';
-import useGlobalCtx from 'src/store/ol-global/use-global-ctx';
+import { useGlobalStore, useTranslations } from '@store/global';
+import { useCommonProfileSWR, UpdateNameDTO } from 'src/api/profile/use-profile-mutation';
 
 const RenameModal = () => {
-  const { translate, content, profile } = useGlobalCtx();
+  const translate = useTranslations();
 
-  const profileMutation = useCommonProfileMutation<UpdateNameDTO>(
-    '/api/profile/name',
-    'POST',
-    MUTATION_KEYS.PROFILE_NAME
+  const { profile } = useGlobalStore((state) => ({ profile: state.profile }));
+
+  const profileSwr = useCommonProfileSWR<UpdateNameDTO>(
+    process.env.NEXT_PUBLIC_API_URL + '/profile/name',
+    'POST'
   );
 
   const form = useForm({
@@ -20,12 +20,12 @@ const RenameModal = () => {
     },
 
     validate: {
-      display_name: isNotEmpty(translate(content.common.fieldRequired)),
+      display_name: isNotEmpty(translate('common.fieldRequired')),
     },
   });
 
   const handleSubmit = async (values: typeof form.values) => {
-    await profileMutation.mutateAsync({ display_name: values.display_name });
+    await profileSwr.trigger({ display_name: values.display_name });
 
     closeAllModals();
   };
@@ -33,14 +33,14 @@ const RenameModal = () => {
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <TextInput
-        label={translate(content.pages.user.details.modalNameInputLabel)}
-        placeholder={translate(content.pages.user.details.modalNameInputPlaceholder)}
+        label={translate('pages.user.details.modalNameInputLabel')}
+        placeholder={translate('pages.user.details.modalNameInputPlaceholder')}
         mt="sm"
         {...form.getInputProps('display_name')}
       />
 
-      <Button fullWidth mt="xl" type="submit" loading={profileMutation.isLoading}>
-        {translate(content.pages.user.details.modalNameBtn)}
+      <Button fullWidth mt="xl" type="submit" loading={profileSwr.isMutating}>
+        {translate('pages.user.details.modalNameBtn')}
       </Button>
     </form>
   );

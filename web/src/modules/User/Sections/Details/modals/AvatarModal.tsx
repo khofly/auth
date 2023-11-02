@@ -1,29 +1,31 @@
 import { Button, TextInput, useMantineTheme } from '@mantine/core';
 import { matches, useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
-import { useSession } from '@supabase/auth-helpers-react';
+import { useGlobalStore, useTranslations } from '@store/global';
 import { IconBrandGithub, IconBrandGitlab } from '@tabler/icons-react';
-import { useCommonProfileMutation, UpdateAvatarDTO } from 'src/api/profile/use-profile-mutation';
-import { MUTATION_KEYS } from 'src/api/queryKeys';
-import useGlobalCtx from 'src/store/ol-global/use-global-ctx';
+import { getIconStyle } from '@utils/functions/iconStyle';
+import { useCommonProfileSWR, UpdateAvatarDTO } from 'src/api/profile/use-profile-mutation';
 
 const AvatarModal = () => {
-  const { translate, content, profile } = useGlobalCtx();
-  const session = useSession();
+  const translate = useTranslations();
+  const { session, profile } = useGlobalStore((state) => ({
+    session: state.session,
+    profile: state.profile,
+  }));
+
   const theme = useMantineTheme();
 
   const providerAvatar = session.user?.user_metadata?.avatar_url || '';
 
   const provider = session.user.app_metadata.provider;
   const providerIcon = {
-    github: <IconBrandGithub size={20} />,
-    gitlab: <IconBrandGitlab size={20} color={theme.colors.orange[6]} />,
+    github: <IconBrandGithub style={getIconStyle(20)} />,
+    gitlab: <IconBrandGitlab style={getIconStyle(20)} color={theme.colors.orange[6]} />,
   };
 
-  const profileMutation = useCommonProfileMutation<UpdateAvatarDTO>(
-    '/api/profile/avatar',
-    'POST',
-    MUTATION_KEYS.PROFILE_AVATAR
+  const profileSwr = useCommonProfileSWR<UpdateAvatarDTO>(
+    process.env.NEXT_PUBLIC_API_URL + '/profile/avatar',
+    'POST'
   );
 
   const form = useForm({
@@ -34,13 +36,13 @@ const AvatarModal = () => {
     validate: {
       avatar_url: matches(
         /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
-        translate(content.pages.user.details.invalidUrl)
+        translate('pages.user.details.invalidUrl')
       ),
     },
   });
 
   const handleSubmit = async (values: typeof form.values) => {
-    await profileMutation.mutateAsync({ avatar_url: values.avatar_url });
+    await profileSwr.trigger({ avatar_url: values.avatar_url });
 
     closeAllModals();
   };
@@ -48,26 +50,26 @@ const AvatarModal = () => {
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <TextInput
-        label={translate(content.pages.user.details.modalAvatarInputNewLabel)}
-        placeholder={translate(content.pages.user.details.modalAvatarInputNewPlaceholder)}
+        label={translate('pages.user.details.modalAvatarInputNewLabel')}
+        placeholder={translate('pages.user.details.modalAvatarInputNewPlaceholder')}
         mt="sm"
         {...form.getInputProps('avatar_url')}
       />
 
       {['github', 'gitlab'].includes(provider) && (
         <TextInput
-          label={translate(content.pages.user.details.modalAvatarInputOldLabel)}
-          description={translate(content.pages.user.details.modalAvatarInputOldDescription)}
+          label={translate('pages.user.details.modalAvatarInputOldLabel')}
+          description={translate('pages.user.details.modalAvatarInputOldDescription')}
           placeholder=""
           mt="lg"
           value={providerAvatar}
           onChange={() => {}}
-          icon={providerIcon[provider] || null}
+          leftSection={providerIcon[provider] || null}
         />
       )}
 
-      <Button fullWidth mt="xl" type="submit" loading={profileMutation.isLoading}>
-        {translate(content.pages.user.details.modalAvatarBtn)}
+      <Button fullWidth mt="xl" type="submit" loading={profileSwr.isMutating}>
+        {translate('pages.user.details.modalAvatarBtn')}
       </Button>
     </form>
   );

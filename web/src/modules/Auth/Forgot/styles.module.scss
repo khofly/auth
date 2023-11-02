@@ -1,0 +1,18 @@
+@use 'variables' as vars;
+
+.form {
+  width: 100%;
+}
+
+.controls {
+  @media (max-width: vars.$mantine-breakpoint-xs) {
+    flex-direction: column-reverse;
+  }
+}
+
+.control {
+  @media (max-width: vars.$mantine-breakpoint-xs) {
+    width: 100%;
+    text-align: center;
+  }
+}

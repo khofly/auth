@@ -4,9 +4,7 @@ import { ITeamWithAdmin } from 'src/api/team/use-team-query';
 import EmptyState from '../states/EmptyState';
 import MemberRow from './MemberRow';
 import OpenTeamTableTop from './OpenTeamTableTop';
-import { useTeamUsersQuery } from 'src/api/team/use-team-users-query';
-import { useQueryClient } from '@tanstack/react-query';
-import { MUTATION_KEYS, QUERY_KEYS } from 'src/api/queryKeys';
+import { useTeamUsersSWR } from 'src/api/team/use-team-users-query';
 
 interface Props {
   openTeam: ITeamWithAdmin;
@@ -15,7 +13,7 @@ interface Props {
 
 const OpenTeamTable: React.FC<Props> = ({ openTeam, setOpenTeam }) => {
   // Fetch members
-  const { data: members, isFetching, refetch } = useTeamUsersQuery(openTeam?.id);
+  const { data: members, isLoading, mutate } = useTeamUsersSWR(openTeam?.id);
 
   // Pagination
   const [page, setPage] = useState<number>(1);
@@ -26,12 +24,12 @@ const OpenTeamTable: React.FC<Props> = ({ openTeam, setOpenTeam }) => {
   const rows = members && members.map((m, i) => <MemberRow key={i} adminId={openTeam?.admin_id} {...m} />);
 
   useEffect(() => {
-    if (openTeam) refetch();
+    if (openTeam) mutate();
   }, [openTeam]);
 
   return (
     <Collapse in={!!openTeam}>
-      <ScrollArea sx={{ overflow: 'unset' }} offsetScrollbars>
+      <ScrollArea style={{ overflow: 'unset' }} offsetScrollbars>
         <OpenTeamTableTop
           members={members}
           openTeam={openTeam}
@@ -49,12 +47,12 @@ const OpenTeamTable: React.FC<Props> = ({ openTeam, setOpenTeam }) => {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>{!isFetching && rows}</tbody>
+          <tbody>{!isLoading && rows}</tbody>
         </Table>
 
-        {!isFetching && !members?.length && <EmptyState />}
+        {!isLoading && !members?.length && <EmptyState />}
 
-        {isFetching && (
+        {isLoading && (
           <Center my="lg">
             <Loader size="lg" />
           </Center>

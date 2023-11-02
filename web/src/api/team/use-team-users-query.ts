@@ -1,7 +1,7 @@
-import { IApiResponse, ITeam } from '@khofly/core';
-import { useQuery } from '@tanstack/react-query';
-import { QUERY_KEYS } from '../queryKeys';
 import useFetch from '../use-fetch';
+import { useGlobalStore } from '@store/global';
+import useToast from '@hooks/use-toast';
+import useSWR from 'swr';
 
 export interface IMemberWithUser {
   user_id: string;
@@ -13,22 +13,25 @@ export interface IMemberWithUser {
   };
 }
 
-const useTeamUsersQuery = (id: string) => {
+export const useTeamUsersSWR = (id: string) => {
+  const { session } = useGlobalStore((state) => ({
+    session: state.session,
+  }));
+
   const { fetchData } = useFetch();
 
-  return useQuery<IApiResponse<IMemberWithUser[]>['data']>({
-    queryKey: [QUERY_KEYS.MEMBERS],
-    queryFn: async () => {
-      if (!id) return [];
+  const fetcher = async (key) =>
+    fetchData(key, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${session?.access_token}`,
+        'SB-Refresh-Token': session?.refresh_token || '',
+      },
+    });
 
-      const { data } = await fetchData(`/api/team/user?team_id=` + id);
-
-      return data;
-    },
-    staleTime: Infinity,
-    refetchOnMount: true,
-    refetchOnWindowFocus: false,
+  return useSWR(process.env.NEXT_PUBLIC_API_URL + `/team/user?team_id=` + id, fetcher, {
+    revalidateOnFocus: true,
+    revalidateOnMount: true,
   });
 };
-
-export { useTeamUsersQuery };

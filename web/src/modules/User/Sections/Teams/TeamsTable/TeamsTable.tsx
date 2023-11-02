@@ -1,10 +1,9 @@
 import { Center, Collapse, Loader, ScrollArea, Table } from '@mantine/core';
 import React, { Dispatch, useState } from 'react';
 import TeamsTableTop from './TeamsTableTop';
-import { ITeamWithAdmin, useTeamsQuery } from 'src/api/team/use-team-query';
+import { ITeamWithAdmin, useTeamsSWR } from 'src/api/team/use-team-query';
 import TeamRow from './TeamRow';
 import EmptyState from '../states/EmptyState';
-import useGlobalCtx from 'src/store/ol-global/use-global-ctx';
 
 interface Props {
   setOpenTeam: Dispatch<ITeamWithAdmin>;
@@ -13,10 +12,8 @@ interface Props {
 }
 
 const TeamsTable: React.FC<Props> = ({ openTeam, setOpenTeam, tierTeamAvailable }) => {
-  const { translate, content, tier } = useGlobalCtx();
-
   // Teams data
-  const { data: teams, isLoading } = useTeamsQuery();
+  const { data: teams, isLoading } = useTeamsSWR();
 
   // Pagination
   const [page, setPage] = useState<number>(1);
@@ -25,11 +22,11 @@ const TeamsTable: React.FC<Props> = ({ openTeam, setOpenTeam, tierTeamAvailable 
   const total = Math.ceil(teams?.length / perPage);
 
   const rows =
-    teams && teams.map((t, i) => <TeamRow key={i} setOpenTeam={setOpenTeam} setPage={setPage} {...t} />);
+    teams && teams?.map((t, i) => <TeamRow key={i} setOpenTeam={setOpenTeam} setPage={setPage} {...t} />);
 
   return (
     <Collapse in={!openTeam}>
-      <ScrollArea sx={{ overflow: 'unset' }} offsetScrollbars>
+      <ScrollArea style={{ overflow: 'unset' }} offsetScrollbars>
         {teams && (
           <TeamsTableTop
             teams={teams}

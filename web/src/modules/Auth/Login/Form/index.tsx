@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   TextInput,
@@ -29,7 +31,6 @@ import {
   IconBrandGitlab,
 } from '@tabler/icons-react';
 import { useTranslations } from '@store/global';
-import classes from './styles.module.scss';
 import { getIconStyle } from '@utils/functions/iconStyle';
 
 const LoginForm: React.FC<LoginFormProps> = ({ withTitle = true }) => {
@@ -53,7 +54,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ withTitle = true }) => {
     <Container w={460} size={460} my={40} px={0}>
       {withTitle && (
         <>
-          <Title ta="center" className={classes.title}>
+          <Title ta="center" fw={700}>
             {translate('pages.auth_login.title')}
           </Title>
 
@@ -113,7 +114,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ withTitle = true }) => {
 
         <Divider label="Or continue with:" labelPosition="center" my={26} />
 
-        <Group grow mt="lg">
+        <Group grow>
           <AuthButton
             leftSection={<IconBrandGithub style={getIconStyle(22)} />}
             radius="xl"

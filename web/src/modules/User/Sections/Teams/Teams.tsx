@@ -2,15 +2,15 @@ import { TIER_LIMITS } from '@khofly/core';
 import { Divider, Flex, Paper, Space, Text } from '@mantine/core';
 import { IconMailbox, IconUsers } from '@tabler/icons-react';
 import React, { useState } from 'react';
-import useGlobalCtx from 'src/store/ol-global/use-global-ctx';
 import InvitationsTable from './Invitations/InvitationsTable';
 import TeamsTable from './TeamsTable/TeamsTable';
 import { ITeamWithAdmin } from 'src/api/team/use-team-query';
 
 import OpenTeamTable from './OpenTeam/OpenTeamTable';
+import { useTranslations } from '@store/global';
 
 const Teams = () => {
-  const { translate, content } = useGlobalCtx();
+  const translate = useTranslations();
 
   const [openTeam, setOpenTeam] = useState<ITeamWithAdmin>(null); // team
 
@@ -21,8 +21,8 @@ const Teams = () => {
       <Flex align="center" mb="xl">
         <IconUsers size={32} />
 
-        <Text size={28} weight={600} ml="sm">
-          {openTeam ? openTeam?.name : translate(content.pages.user.teams.title1)}
+        <Text fz={28} fw={600} ml="sm">
+          {openTeam ? openTeam?.name : translate('pages.user.teams.title1')}
         </Text>
       </Flex>
 
@@ -36,8 +36,8 @@ const Teams = () => {
       <Flex align="center" mb="xl">
         <IconMailbox size={32} />
 
-        <Text size={28} weight={600} ml="sm">
-          {translate(content.pages.user.teams.title2)}
+        <Text fz={28} fw={600} ml="sm">
+          {translate('pages.user.teams.title2')}
         </Text>
       </Flex>
 

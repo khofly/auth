@@ -10,9 +10,13 @@ const useApiProfile = () => {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
-  const [session, setSession] = useState<Session | null>(null);
+  // const [session, setSession] = useState<Session | null>(null);
 
-  const { setProfile } = useGlobalStore();
+  const { setProfile, setSession, session } = useGlobalStore((state) => ({
+    setSession: state.setSession,
+    setProfile: state.setProfile,
+    session: state.session,
+  }));
 
   useEffect(() => {
     supabaseClient.auth.getSession().then(({ data: { session } }) => {

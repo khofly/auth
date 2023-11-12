@@ -8,8 +8,10 @@ import { teamRoutes } from './api/team';
 import { userRoutes } from './api/user';
 import { profileRoutes } from './api/profile';
 
+const PORT = process.env.NODE_ENV === 'production' ? 3001 : 4001;
+
 // ---------------------------------------------------------------------------------------------------------
-// Configure docs REST API - Convert, Upload, Download
+// Configure auth REST API - User, Team, Profile
 // ---------------------------------------------------------------------------------------------------------
 
 const elysia = new Elysia()
@@ -21,18 +23,13 @@ const elysia = new Elysia()
   .on('error', middleware_Error) // Handle errors
 
   // Routes
-  .get('/', () => 'Khofly Auth API')
+  .get('/', () => `Khofly Auth API - ${process.env.NODE_ENV}`)
 
   .use(teamRoutes)
   .use(userRoutes)
   .use(profileRoutes)
 
-  // ---------------------------------------------------------------------------------------------------------
-  // WIP: Configure docs Collaboration API - Hocuspocus custom implementation with Buns WebSocket
-  // ---------------------------------------------------------------------------------------------------------
-  // .ws('/collab', handleHocuspocus)
-
   // Listen
-  .listen(4001);
+  .listen(PORT);
 
 console.log(`🦊 Elysia is running at ${elysia.server?.hostname}:${elysia.server?.port}`);

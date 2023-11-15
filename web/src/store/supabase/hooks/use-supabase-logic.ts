@@ -27,8 +27,7 @@ export const useSupabaseLogic = () => {
               },
               setItem(key, value) {
                 return setCookie(key, value, {
-                  // domain: process.env.NODE_ENV === 'development' ? 'localhost' : cookieDomain,
-                  domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'khofly.com',
+                  domain: process.env.NODE_ENV === 'development' ? 'localhost' : cookieDomain,
                   httpOnly: false,
                   sameSite: 'lax',
                   maxAge: 60 * 60 * 24 * 1, // ~ 1day

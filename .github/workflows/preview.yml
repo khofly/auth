@@ -18,4 +18,4 @@ jobs:
           vercel-org-id: ${{ secrets.ORG_ID }}
           vercel-project-id: ${{ secrets.PROJECT_ID }}
           vercel-project-name: khofly-auth
-          alias-domains: staging-auth.khofly.tech
+          alias-domains: staging-auth.khofly.com

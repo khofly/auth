@@ -1,21 +1,21 @@
-# name: Vercel Preview Deployment
-# on:
-#   push:
-#     branches:
-#       - staging
-# jobs:
-#   Deploy-Preview:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
+name: Vercel Preview Deployment
+on:
+  push:
+    branches:
+      - staging
+jobs:
+  Deploy-Preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
-#       # Official vercel example - https://vercel.com/guides/how-can-i-use-github-actions-with-vercel
+      # Official vercel example - https://vercel.com/guides/how-can-i-use-github-actions-with-vercel
 
-#       # With amondnet/vercel-action - https://github.com/amondnet/vercel-action
-#       - uses: amondnet/vercel-action@v25
-#         with:
-#           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-#           vercel-org-id: ${{ secrets.ORG_ID }}
-#           vercel-project-id: ${{ secrets.PROJECT_ID }}
-#           vercel-project-name: khofly-auth
-#           alias-domains: staging-auth.khofly.tech
+      # With amondnet/vercel-action - https://github.com/amondnet/vercel-action
+      - uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID }}
+          vercel-project-id: ${{ secrets.PROJECT_ID }}
+          vercel-project-name: khofly-auth
+          alias-domains: staging-auth.khofly.tech

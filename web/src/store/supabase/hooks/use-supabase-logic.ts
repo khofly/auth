@@ -37,11 +37,10 @@ export const useSupabaseLogic = () => {
             setItem(key, value) {
               return setCookie(key, value, {
                 domain: process.env.NODE_ENV === 'development' ? 'localhost' : newCookieDomain,
-                httpOnly: false,
-                sameSite: 'lax',
                 maxAge: 60 * 60 * 24 * 1, // ~ 1 day
                 path: '/',
-                secure: redirectTo?.startsWith('https://'),
+                sameSite: 'lax',
+                // secure: redirectTo?.startsWith('https://'),
               });
             },
             removeItem(key) {

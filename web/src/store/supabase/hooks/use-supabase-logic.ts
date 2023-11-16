@@ -16,7 +16,7 @@ export const useSupabaseLogic = () => {
   }));
 
   useEffect(() => {
-    if (!supabaseClient) {
+    if (!supabaseClient && cookieDomain) {
       const newClient = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -31,7 +31,7 @@ export const useSupabaseLogic = () => {
                   domain: process.env.NODE_ENV === 'development' ? 'localhost' : cookieDomain,
                   httpOnly: false,
                   sameSite: 'lax',
-                  maxAge: 60 * 60 * 24 * 1, // ~ 1day
+                  maxAge: 60 * 60 * 24 * 1, // ~ 1 day
                   path: '/',
                   secure: redirectTo?.startsWith('https://'),
                 });

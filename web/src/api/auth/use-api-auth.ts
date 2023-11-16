@@ -37,8 +37,6 @@ export const useApiAuth = () => {
   }));
   const router = useRouter();
   const { fetchData } = useFetch();
-  console.log(cookieDomain);
-  console.log(redirectTo);
 
   const { supabaseClient } = useSupabaseStore((state) => ({ supabaseClient: state.supabaseClient }));
 

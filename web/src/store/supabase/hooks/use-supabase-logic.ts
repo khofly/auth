@@ -5,7 +5,8 @@ import { createClient } from '@supabase/supabase-js';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
 export const useSupabaseLogic = () => {
-  const { cookieDomain } = useAuthStore((state) => ({
+  const { redirectTo, cookieDomain } = useAuthStore((state) => ({
+    redirectTo: state.redirectTo,
     cookieDomain: state.cookieDomain,
   }));
 
@@ -32,7 +33,7 @@ export const useSupabaseLogic = () => {
                   sameSite: 'lax',
                   maxAge: 60 * 60 * 24 * 1, // ~ 1day
                   path: '/',
-                  secure: process.env.NEXT_PUBLIC_HOST.startsWith('https://'),
+                  secure: redirectTo?.startsWith('https://'),
                 });
               },
               removeItem(key) {

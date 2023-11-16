@@ -6,9 +6,8 @@ import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 export const useSupabaseLogic = () => {
-  const { redirectTo, cookieDomain, setCookieDomain, setRedirectTo } = useAuthStore((state) => ({
+  const { redirectTo, setCookieDomain, setRedirectTo } = useAuthStore((state) => ({
     redirectTo: state.redirectTo,
-    cookieDomain: state.cookieDomain,
     setRedirectTo: state.setRedirectTo,
     setCookieDomain: state.setCookieDomain,
   }));
@@ -37,7 +36,7 @@ export const useSupabaseLogic = () => {
             },
             setItem(key, value) {
               return setCookie(key, value, {
-                domain: process.env.NODE_ENV === 'development' ? 'localhost' : cookieDomain,
+                domain: process.env.NODE_ENV === 'development' ? 'localhost' : newCookieDomain,
                 httpOnly: false,
                 sameSite: 'lax',
                 maxAge: 60 * 60 * 24 * 1, // ~ 1 day

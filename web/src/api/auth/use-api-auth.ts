@@ -37,36 +37,10 @@ export const useApiAuth = () => {
   }));
   const router = useRouter();
   const { fetchData } = useFetch();
+  console.log(cookieDomain);
+  console.log(redirectTo);
 
   const { supabaseClient } = useSupabaseStore((state) => ({ supabaseClient: state.supabaseClient }));
-
-  // const supabaseClient = createClient(
-  //   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  //   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  //   {
-  //     auth: {
-  //       storage: {
-  //         getItem(key) {
-  //           return getCookie(key);
-  //         },
-  //         setItem(key, value) {
-  //           return setCookie(key, value, {
-  //             domain: process.env.NODE_ENV === 'development' ? 'localhost' : cookieDomain,
-  //             httpOnly: false,
-  //             sameSite: 'lax',
-  //             maxAge: 60 * 60 * 24 * 1, // ~ 1day
-  //             path: '/',
-  //             secure: process.env.NEXT_PUBLIC_HOST.startsWith('https://'),
-  //           });
-  //         },
-  //         removeItem(key) {
-  //           return deleteCookie(key);
-  //         },
-  //       },
-  //       // storageKey: 'sb-something',
-  //     },
-  //   }
-  // );
 
   const [isLoading, setLoading] = useState(false);
 

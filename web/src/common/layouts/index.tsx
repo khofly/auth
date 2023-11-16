@@ -11,7 +11,6 @@ import { useApiProfile } from 'src/api/profile/use-api-profile';
 import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
 import { THEME_MANTINE } from '@utils/resources/theme';
-import { useAuthLogic } from '@store/auth';
 import { useSupabaseLogic } from '@store/supabase/hooks/use-supabase-logic';
 import { useApiTier } from 'src/api/tier/use-tier-query';
 import { logConsoleWarning } from '@utils/functions/consoleWarning';
@@ -21,7 +20,6 @@ const AppLayout: React.FC<IFC> = ({ children }) => {
   // Updates profile on session change
   useApiProfile();
   useApiTier();
-  useAuthLogic();
   useSupabaseLogic();
 
   useEffect(() => logConsoleWarning(), []);
